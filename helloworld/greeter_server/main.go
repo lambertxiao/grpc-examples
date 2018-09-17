@@ -1,23 +1,3 @@
-/*
- *
- * Copyright 2015 gRPC authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
-//go:generate protoc -I ../helloworld --go_out=plugins=grpc:../helloworld ../helloworld/helloworld.proto
-
 package main
 
 import (
@@ -31,27 +11,31 @@ import (
 )
 
 const (
-	port = ":50051"
+	port = ":8080"
 )
 
-// server is used to implement helloworld.GreeterServer.
-type server struct{}
+// server结构体用来实现 helloworld.GreeterServer 接口的具体操作
+type server struct {}
 
-// SayHello implements helloworld.GreeterServer
+// 实现 GreeterServer 的 SayHello 方法的具体逻辑
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+	return &pb.HelloReply{Message: "Hello" + in.Name}, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
+	listen, err := net.Listen("tcp", port)
+
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
 	s := grpc.NewServer()
+	// 需要两个参数, grpc service 和具体的实现
 	pb.RegisterGreeterServer(s, &server{})
-	// Register reflection service on gRPC server.
+	// 在给定的 grpc service 上 注册反射服务
 	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+
+	if err := s.Serve(listen); err != nil {
+		log.Fatalf("failed to serve %v", err)
 	}
 }

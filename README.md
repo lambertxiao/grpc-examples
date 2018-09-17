@@ -1,21 +1,17 @@
-gRPC in 3 minutes (Go)
+三分钟上手 GRPC (Go)
 ======================
 
-BACKGROUND
+背景
 -------------
-For this sample, we've already generated the server and client stubs from [helloworld.proto](helloworld/helloworld/helloworld.proto).
+在这个例子里,我们已经通过 [helloworld.proto] 生成了服务端和客户端的桩文件
+(helloworld/helloworld/helloworld.proto).
 
-PREREQUISITES
+前提
 -------------
 
-- This requires Go 1.6 or later
-- Requires that [GOPATH is set](https://golang.org/doc/code.html#GOPATH)
+- Go 1.6 或更高
+- 已经配置好GOPATH
 
-```
-$ go help gopath
-$ # ensure the PATH contains $GOPATH/bin
-$ export PATH=$PATH:$GOPATH/bin
-```
 
 INSTALL
 -------
@@ -56,9 +52,9 @@ OPTIONAL - Rebuilding the generated code
    ```
    $ go generate google.golang.org/grpc/examples/helloworld/...
    ```
-   
+
    Or run `protoc` command (with the grpc plugin)
-   
+
    ```
    $ protoc -I helloworld/ helloworld/helloworld.proto --go_out=plugins=grpc:helloworld
    ```
